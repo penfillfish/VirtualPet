@@ -1,13 +1,11 @@
 void setup(){
-  int headRadius = 60;
-  int earHeight = headRadius/2;
-  PVector body = new PVector(250,250);
-  PVector bodyRadius = new PVector(100,50);
-  PVector head = new PVector(164,196);
   size(500, 500);
   background(255,255,255);
   smooth();
-  
+}
+
+void drawPig(int headRadius, PVector body, PVector bodyRadius, PVector head){
+  int earHeight = headRadius/2;
   fill(253, 172, 228);
   stroke(64);
 
@@ -48,10 +46,10 @@ void setup(){
   ellipse(body.x+(bodyRadius.x/2),body.y+bodyRadius.y+25,40,100);//Back Leg
   
   fill(0);
-  arc(200,375,25,25,radians(180),radians(270));//Front Toe
-  arc(300,375,25,25,radians(180),radians(270));//Back Toe
+  arc(body.x-50,body.y+125,25,25,radians(180),radians(270));//Front Toe
+  arc(body.x+50,body.y+125,25,25,radians(180),radians(270));//Back Toe
 }
 
 void draw(){
-  
+  drawPig(60,new PVector(250,250),new PVector(100,50),new PVector(164,196));
 }
