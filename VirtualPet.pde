@@ -1,11 +1,39 @@
+import processing.serial.*;
+import cc.arduino.*;
+Arduino arduino;
+/* 
+0:Temperature Sensor
+1:RightButton
+2:RightButton
+3:Slide switch
+4:Microphone Audio Sensor
+5:Motion Sensor(0-230)
+6:LeftButton
+7:LeftButton
+8:Returns 2
+9:Capacitive Touch sensor
+10:
+11:Capacitive Touch sensor
+12:
+13:
+14:
+15:
+*/
+int x = 0;
+int y = 0;
 void setup(){
-  size(500, 500);
+  size(1000, 1000);
   background(255,255,255);
   smooth();
+  arduino = new Arduino(this, Arduino.list()[0], 57600);
 }
 
-void drawPig(int headRadius, PVector body, PVector bodyRadius, PVector head){
-  int earHeight = headRadius/2;
+void drawPig(float size){
+  PVector body = new PVector(0,0);
+  PVector head = new PVector(-86,-54);
+  PVector bodyRadius = new PVector(100*size,50*size);
+  int headRadius = (int)(60*size);
+  int earHeight = (int)(headRadius/2);
   fill(253, 172, 228);
   stroke(64);
 
@@ -22,9 +50,9 @@ void drawPig(int headRadius, PVector body, PVector bodyRadius, PVector head){
   triangle(headRadius,0,headRadius+earHeight,earHeight/2,headRadius-(headRadius*2/15),earHeight);//Right Ear
   popMatrix();
   
-  ellipse(head.x,225,headRadius,headRadius/2); //Nose
-  ellipse(head.x-15,225,15,15);//Left Nostrail
-  ellipse(head.x+15,225,15,15);//Right Nostrail
+  ellipse(head.x,head.y+29,headRadius,headRadius/2); //Nose
+  ellipse(head.x-15,head.y+29,15,15);//Left Nostrail
+  ellipse(head.x+15,head.y+29,15,15);//Right Nostrail
   
   fill(225);
   ellipse(head.x-25,head.y-25,25,25);//Left Eye
@@ -50,6 +78,26 @@ void drawPig(int headRadius, PVector body, PVector bodyRadius, PVector head){
   arc(body.x+50,body.y+125,25,25,radians(180),radians(270));//Back Toe
 }
 
-void draw(){
-  drawPig(60,new PVector(250,250),new PVector(100,50),new PVector(164,196));
+public void draw(){
+  background(224,255,255);
+  fill(155, 118, 83);
+  rect(0,850,1000,150);
+  fill(124, 252, 0);
+  rect(0,825,1000,25);
+  y = arduino.analogRead(5);
+  int leftButton = arduino.analogRead(6);
+  int rightButton = arduino.analogRead(1);
+  if (leftButton > 0){
+    x-=10;
+  }
+  else if (rightButton > 0){
+    x+=10;  
+  }
+  pushMatrix();
+  scale(1.0);
+  translate(500,500);
+  translate(x,y);
+  drawPig(1.0);
+  popMatrix();
+  y=0;
 }
